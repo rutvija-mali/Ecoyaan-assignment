@@ -1,20 +1,8 @@
 import CartClient from "@/components/CartClient";
-
-async function getCartData() {
-  // Fetch from our own API route — this runs on the server during SSR
-  const res = await fetch("http://localhost:3000/api/cart", {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch cart data");
-  }
-
-  return res.json();
-}
+import { getCart } from "@/lib/cart";
 
 export default async function CartPage() {
-  const data = await getCartData();
+  const data = await getCart();
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
