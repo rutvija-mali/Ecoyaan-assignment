@@ -11,6 +11,7 @@ export function CheckoutProvider({ children }) {
     const [shippingFee, setShippingFee] = useState(0);
     const [discount, setDiscount] = useState(0);
     const [shippingAddress, setShippingAddress] = useState(null);
+    const [savedAddresses, setSavedAddresses] = useState([]);
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [hydrated, setHydrated] = useState(false);
 
@@ -24,6 +25,7 @@ export function CheckoutProvider({ children }) {
                 if (parsed.shippingFee !== undefined) setShippingFee(parsed.shippingFee);
                 if (parsed.discount !== undefined) setDiscount(parsed.discount);
                 if (parsed.shippingAddress) setShippingAddress(parsed.shippingAddress);
+                if (parsed.savedAddresses) setSavedAddresses(parsed.savedAddresses);
                 if (parsed.orderPlaced) setOrderPlaced(parsed.orderPlaced);
             }
         } catch (e) {
@@ -38,12 +40,12 @@ export function CheckoutProvider({ children }) {
         try {
             localStorage.setItem(
                 STORAGE_KEY,
-                JSON.stringify({ cartItems, shippingFee, discount, shippingAddress, orderPlaced })
+                JSON.stringify({ cartItems, shippingFee, discount, shippingAddress, savedAddresses, orderPlaced })
             );
         } catch (e) {
             console.error("Failed to save checkout state:", e);
         }
-    }, [cartItems, shippingFee, discount, shippingAddress, orderPlaced, hydrated]);
+    }, [cartItems, shippingFee, discount, shippingAddress, savedAddresses, orderPlaced, hydrated]);
 
     const initializeCart = (data) => {
         // Only initialize if cart is empty (don't overwrite localStorage state)
@@ -58,6 +60,12 @@ export function CheckoutProvider({ children }) {
         setShippingAddress(address);
     };
 
+    const addAddress = (address) => {
+        const newAddress = { ...address, id: Date.now().toString() };
+        setSavedAddresses((prev) => [...prev, newAddress]);
+        return newAddress;
+    };
+
     const placeOrder = () => {
         setOrderPlaced(true);
     };
@@ -68,7 +76,22 @@ export function CheckoutProvider({ children }) {
         setOrderPlaced(false);
         setShippingFee(0);
         setDiscount(0);
-        localStorage.removeItem(STORAGE_KEY);
+
+        try {
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify({
+                    cartItems: [],
+                    shippingFee: 0,
+                    discount: 0,
+                    shippingAddress: null,
+                    savedAddresses,
+                    orderPlaced: false,
+                })
+            );
+        } catch (e) {
+            console.error("Failed to clear checkout state:", e);
+        }
     };
 
     const subtotal = cartItems.reduce(
@@ -84,12 +107,14 @@ export function CheckoutProvider({ children }) {
                 shippingFee,
                 discount,
                 shippingAddress,
+                savedAddresses,
                 orderPlaced,
                 subtotal,
                 grandTotal,
                 hydrated,
                 initializeCart,
                 updateShippingAddress,
+                addAddress,
                 placeOrder,
                 resetOrder,
             }}

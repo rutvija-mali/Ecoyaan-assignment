@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import { CheckoutProvider } from "@/context/CheckoutContext";
+import CheckoutHeader from "@/components/CheckoutHeader";
 import "./globals.css";
 
 const inter = Inter({
@@ -17,7 +18,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <CheckoutProvider>{children}</CheckoutProvider>
+        <CheckoutProvider>
+          <main className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
+            <div className="pt-8 sm:pt-10 mb-4 sm:mb-8">
+              <CheckoutHeader className="text-center" />
+            </div>
+            {children}
+          </main>
+        </CheckoutProvider>
       </body>
     </html>
   );

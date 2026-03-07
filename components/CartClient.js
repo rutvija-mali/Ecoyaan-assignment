@@ -34,17 +34,17 @@ export default function CartClient({ serverData }) {
     const total = cartItems.length > 0 ? grandTotal : sub + fee - disc;
 
     return (
-        <div className="space-y-8">
+        <div className="w-full space-y-6">
             <StepIndicator currentStep={1} />
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-7 lg:gap-9">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 ">
                 {/* Cart Items */}
                 <div className="lg:col-span-2">
-                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-7 space-y-5">
+                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
                             Your Cart ({items.length} {items.length === 1 ? "item" : "items"})
                         </h2>
-                        <div className="space-y-4">
+                        <div className="divide-y divide-gray-100 flex flex-col gap-4">
                             {items.map((item) => (
                                 <CartItem key={item.product_id} item={item} />
                             ))}
@@ -54,7 +54,7 @@ export default function CartClient({ serverData }) {
 
                 {/* Order Summary Sidebar */}
                 <div className="lg:col-span-1">
-                    <div className="sticky top-8 space-y-5">
+                    <div className="sticky top-8 space-y-4">
                         <OrderSummary
                             subtotal={sub}
                             shippingFee={fee}
@@ -63,7 +63,7 @@ export default function CartClient({ serverData }) {
                         />
                         <button
                             onClick={() => router.push("/shipping")}
-                            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 px-7 rounded-2xl transition-colors duration-200 cursor-pointer text-base shadow-sm hover:shadow-md"
+                            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 px-6 rounded-2xl transition-all duration-200 cursor-pointer text-base shadow-sm hover:shadow-md"
                         >
                             Proceed to Checkout →
                         </button>
