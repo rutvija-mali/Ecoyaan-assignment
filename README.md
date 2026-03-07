@@ -41,3 +41,5 @@ Follow these steps to spin up the local development environment:
 
 4. **View the application**:
    Open [http://localhost:3000](http://localhost:3000) with your browser to explore the fully functional checkout system. You can interact with the cart, proceed to shipping, and mock a payment.
+
+Live Demo: https://ecoyaan-assignment-nine.vercel.app/
